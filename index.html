@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Liste de Noël – Pierre, Nathalya, Toffee & Topito 🐶🐾</title>
 
-<!-- Police -->
 <link href="https://fonts.googleapis.com/css2?family=GreatVibes&display=swap" rel="stylesheet">
 
 <style>
@@ -216,7 +215,7 @@
         color: #b3001b;
     }
 
-    /* POPUP + ANIMATION */
+    /* POPUP */
     #popup {
         display:none;
         position:fixed;
@@ -281,7 +280,7 @@
 </nav>
 
 <div id="liste">
-<h1>Liste de Noël – Pierre, Nathalya, Toffee & Topito 🐶🐾</h1>
+<h1>Liste de Noël – Pierre, Nathalya & Toffee & Topito 🐶🐾</h1>
 <h3 id="countdown"></h3>
 
 <button id="addRowBtn">+ Ajouter un cadeau</button>
@@ -306,12 +305,11 @@
             const currentDay = (today.getMonth() === 11) ? today.getDate() : 0;
 
             for (let i = 1; i <= 24; i++) {
-                const locked = (i === 1) ? "" : (i > currentDay ? "locked" : "");
+                const locked = i > currentDay ? "locked" : "";
                 document.write(`
                     <div class="day ${locked}" onclick="openGift(${i})">
                         <span class="day-number">${i}</span>
-                        <img src="https://cdn-icons-png.flaticon.com/512/4208/4208394.png"
-                        class="gift-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4208/4208394.png" class="gift-icon">
                     </div>
                 `);
             }
@@ -327,10 +325,8 @@
     <img id="popupImage" src="">
 </div>
 
-<!-- MUSIQUE -->
 <audio id="music" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_4f400e82b5.mp3?filename=jingle-bells-110547.mp3" loop></audio>
 
-<!-- SAPIN -->
 <div id="tree">🎄</div>
 
 <script>
@@ -342,9 +338,9 @@ function showTab(tab) {
     document.getElementById(tab).style.display = "block";
 }
 
-/* IMAGES */
+/* IMAGES DU CALENDRIER */
 const images = {
-    1:"images/Toffee1.jpg",
+    1:"images/toffee1.jpg",
     2:"images/topito1.jpg",
     3:"images/toffee2.jpg",
     4:"images/topito2.jpg",
@@ -375,11 +371,10 @@ function openGift(day){
     const today = new Date();
     const nowDay = (today.getMonth() === 11) ? today.getDate() : 0;
 
-	if(day !== 1 && day > nowDay){
-    		alert("Tu ne peux pas ouvrir cette case avant le " + day + " décembre 🎄");
-    		return;
-		}
-
+    if(day > nowDay){
+        alert("Tu ne peux pas ouvrir cette case avant le " + day + " décembre 🎄");
+        return;
+    }
 
     const img = images[day];
     if(!img){
@@ -416,28 +411,61 @@ function toggleMusic(){
     }
 }
 
-/* TABLEAU CADEAUX */
+/* GOOGLE SHEETS — CONFIG */
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbxTbERAsuzQVQDNq4312TuWquXA9HzId_ihefrytSsmMKQhE9n_zqWu5i43LUy5_Xd0/exec";  /* ⚠️ Mets l’URL de ton script Google ici */
+
+/* TABLEAU CADEAUX — GOOGLE SHEETS : CHARGEMENT */
+async function loadTable() {
+    try {
+        const data = await fetch(SHEET_URL).then(r => r.json());
+
+        data.forEach(row => createRow({
+            personne: row.personne,
+            cadeau: row.cadeau,
+            prix: row.prix,
+            lien: row.lien,
+            checked: row.checked === "TRUE"
+        }));
+
+    } catch (e) {
+        console.error("Erreur chargement Google Sheet :", e);
+    }
+}
+
+/* TABLEAU : CRÉATION LIGNE */
 function createRow(data = {}) {
     const tbody = document.querySelector("#giftTable tbody");
     const row = document.createElement("tr");
 
     row.innerHTML = `
-        <td><select><option>Pierre</option><option>Nathalya</option><option>Pierre & Nathalya</option><option>Toffee</option><option>Topito</option></select></td>
-        <td contenteditable="true">${data.cadeau || ""}</td>
-        <td contenteditable="true">${data.prix || ""}</td>
+        <td>
+            <select class="personne">
+                <option ${data.personne==="Pierre"?"selected":""}>Pierre</option>
+                <option ${data.personne==="Nathalya"?"selected":""}>Nathalya</option>
+                <option ${data.personne==="Pierre & Nathalya"?"selected":""}>Pierre & Nathalya</option>
+                <option ${data.personne==="Toffee"?"selected":""}>Toffee</option>
+                <option ${data.personne==="Topito"?"selected":""}>Topito</option>
+            </select>
+        </td>
+
+        <td contenteditable="true" class="cadeau">${data.cadeau || ""}</td>
+        <td contenteditable="true" class="prix">${data.prix || ""}</td>
+
         <td>
             <input class="linkInput" value="${data.lien || ""}" placeholder="Coller un lien">
             <div class="linkDisplay"></div>
         </td>
-        <td><input type="checkbox" ${data.checked ? "checked" : ""}></td>
+
+        <td><input type="checkbox" class="checked" ${data.checked ? "checked" : ""}></td>
     `;
 
-    const checkbox = row.querySelector("input[type='checkbox']");
-    checkbox.onchange = () => {
-        row.classList.toggle("selected", checkbox.checked);
+    /* Checkbox — style vert + sauvegarde */
+    row.querySelector(".checked").onchange = () => {
+        row.classList.toggle("selected", row.querySelector(".checked").checked);
         saveTable();
     };
 
+    /* Lien */
     const linkInput = row.querySelector(".linkInput");
     const linkDisplay = row.querySelector(".linkDisplay");
 
@@ -471,25 +499,32 @@ function createRow(data = {}) {
     tbody.appendChild(row);
 }
 
+/* AJOUTER UNE LIGNE */
 document.getElementById("addRowBtn").onclick = () => { createRow(); saveTable(); };
 
-function saveTable() {
-    const list = [];
+/* GOOGLE SHEETS — SAUVEGARDE */
+async function saveTable() {
+    const rows = [];
+
     document.querySelectorAll("#giftTable tbody tr").forEach(tr => {
-        list.push({
-            cadeau: tr.children[1].innerText,
-            prix: tr.children[2].innerText,
+        rows.push({
+            personne: tr.querySelector(".personne").value,
+            cadeau: tr.querySelector(".cadeau").innerText,
+            prix: tr.querySelector(".prix").innerText,
             lien: tr.querySelector(".linkInput").value,
-            checked: tr.querySelector("input[type=checkbox]").checked
+            checked: tr.querySelector(".checked").checked
         });
     });
-    localStorage.setItem("giftList", JSON.stringify(list));
+
+    await fetch(SHEET_URL, {
+        method:"POST",
+        body: JSON.stringify(rows),
+        headers:{ "Content-Type":"application/json" }
+    });
 }
 
-(function load(){
-    const saved = JSON.parse(localStorage.getItem("giftList") || "[]");
-    saved.forEach(r => createRow(r));
-})();
+/* CHARGEMENT INITIAL */
+loadTable();
 
 /* NEIGE */
 for (let i = 0; i < 60; i++) {
@@ -507,5 +542,4 @@ for (let i = 0; i < 60; i++) {
 
 </body>
 </html>
-
 
