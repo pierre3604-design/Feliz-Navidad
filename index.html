@@ -2,10 +2,10 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Liste de Noël – Pierre & Nathalya / Toffee & Topito 🐶🐾</title>
+<title>Liste de Noël – Pierre, Nathalya, Toffee & Topito 🐶🐾</title>
 
 <!-- Police -->
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=GreatVibes&display=swap" rel="stylesheet">
 
 <style>
     body {
@@ -16,7 +16,6 @@
         overflow-x: hidden;
     }
 
-    /* WRAPPER DORÉ */
     #site-wrapper {
         max-width: 1100px;
         margin: auto;
@@ -26,10 +25,25 @@
         background: #ffffffcc;
         box-shadow: 0 0 25px rgba(180,140,60,0.35);
         backdrop-filter: blur(4px);
-        position: relative;
     }
 
-    /* MODE JOUR / NUIT */
+    nav {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    nav button {
+        padding: 10px 20px;
+        font-size: 18px;
+        border-radius: 10px;
+        border: 2px solid #b3001b;
+        margin: 5px;
+        background: #fff3f3;
+        cursor: pointer;
+    }
+    nav button:hover {
+        background: #ffdede;
+    }
+
     #modeToggle {
         position: fixed;
         top: 20px;
@@ -47,35 +61,19 @@
         background: linear-gradient(#111, #000);
         color: #eee;
     }
-    body.night table {
-        background: #222;
-    }
 
-    /* TITRE + BANNIÈRE */
     h1 {
         text-align: center;
         font-size: 48px;
         color: #b3001b;
-        font-family: "Great Vibes", cursive;
+        font-family: "GreatVibes", cursive;
         padding: 20px;
         border: 4px solid #d6b669;
         border-radius: 20px;
         background: linear-gradient(white, #fff5f5);
-        box-shadow: 0 0 20px rgba(180,120,60,0.25);
         display: inline-block;
     }
-    h1::before, h1::after {
-        content: "🎄✨";
-        padding: 0 12px;
-    }
 
-    h2 {
-        text-align: center;
-        margin-top: -5px;
-        color: #8b0000;
-    }
-
-    /* COMPTE À REBOURS */
     #countdown {
         text-align: center;
         color: #b3001b;
@@ -83,14 +81,10 @@
         margin-bottom: 20px;
     }
 
-    /* TABLEAU ÉLÉGANT */
     table {
         width: 100%;
         border-collapse: collapse;
         border: 2px solid #ddc98c;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(150,0,0,0.15);
         background: white;
     }
 
@@ -120,8 +114,7 @@
         100% { box-shadow: inset 0 0 18px rgba(255,255,255,0.7); }
     }
 
-    /* CHAMP LIEN */
-    input.linkInput {
+    .linkInput {
         width: 92%;
         padding: 6px;
         border: 1px solid #b3001b;
@@ -144,7 +137,6 @@
         text-decoration: underline;
     }
 
-    /* BOUTON AJOUTER */
     #addRowBtn {
         margin: 0 auto 25px auto;
         display: block;
@@ -157,49 +149,139 @@
         cursor: pointer;
     }
 
-    /* NEIGE RÉALISTE */
+    /* Neige */
     .flake {
         position: fixed;
         top: -10px;
         color: white;
         text-shadow: 0 0 5px #fff;
         animation: fall linear infinite;
-        pointer-events: none;
         opacity: 0.9;
+        pointer-events: none;
     }
+    @keyframes fall { to { transform: translateY(105vh); opacity: 0.3; }}
 
-    @keyframes fall {
-        to {
-            transform: translateY(105vh);
-            opacity: 0.3;
-        }
-    }
-
-    /* SAPIN ANIMÉ */
     #tree {
         position: fixed;
         bottom: 10px;
         left: 10px;
         font-size: 55px;
-        animation: sway 2.8s ease-in-out infinite;
+        animation: sway 2.8s infinite;
     }
     @keyframes sway {
         0% { transform: rotate(-3deg); }
         50% { transform: rotate(3deg); }
         100% { transform: rotate(-3deg); }
     }
-</style>
-</head>
 
+    /* CALENDRIER */
+    #calendrier {
+        display: none;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .calendrier-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 15px;
+        padding: 20px;
+    }
+
+    .day {
+        background: white;
+        padding: 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 0 12px #0003;
+        transition: transform .2s;
+        position: relative;
+    }
+    .day.locked {
+        filter: grayscale(1);
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    .day:hover:not(.locked) { transform: scale(1.06); }
+
+    .gift-icon {
+        width: 50px;
+    }
+
+    .day-number {
+        position: absolute;
+        top: 5px;
+        left: 8px;
+        font-weight: bold;
+        color: #b3001b;
+    }
+
+    /* POPUP + ANIMATION */
+    #popup {
+        display:none;
+        position:fixed;
+        top:0; left:0;
+        width:100%; height:100%;
+        background:rgba(0,0,0,0.7);
+        justify-content:center;
+        align-items:center;
+        z-index: 9999;
+    }
+
+    #popup img {
+        max-width: 420px;
+        border-radius: 12px;
+        animation: openMagic 0.7s ease-out;
+    }
+
+    @keyframes openMagic {
+        0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
+        60% { transform: scale(1.1) rotate(3deg); opacity: 1; }
+        100% { transform: scale(1) rotate(0deg); }
+    }
+
+    #popup button {
+        position:absolute;
+        top:20px;
+        right:20px;
+        font-size: 26px;
+        background:none;
+        border:none;
+        cursor:pointer;
+        color:white;
+    }
+
+    /* MUSIQUE */
+    #musicBtn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #b3001b;
+        color: white;
+        border-radius: 40px;
+        padding: 14px 25px;
+        font-size: 18px;
+        border: 2px solid #ddc98c;
+        cursor: pointer;
+        z-index: 999;
+    }
+</style>
+
+</head>
 <body>
 
 <button id="modeToggle">🌙 Mode Nuit</button>
+<button id="musicBtn" onclick="toggleMusic()">🎵 Musique</button>
 
 <div id="site-wrapper">
 
-<h1>Liste de Noël – Pierre, Nathalya & <span style="color:#d6b669;font-weight:bold">Toffee & Topito 🐶🐾</span></h1>
-<h2>Thème Noël élégant ✨</h2>
+<nav>
+    <button onclick="showTab('liste')">Liste de cadeaux</button>
+    <button onclick="showTab('calendrier')">Calendrier de l'avent 🎄</button>
+</nav>
 
+<div id="liste">
+<h1>Liste de Noël – Pierre, Nathalya & Toffee & Topito 🐶🐾</h1>
 <h3 id="countdown"></h3>
 
 <button id="addRowBtn">+ Ajouter un cadeau</button>
@@ -207,172 +289,221 @@
 <table id="giftTable">
     <thead>
         <tr>
-            <th>🎁 Personne</th>
-            <th>🎁 Cadeau</th>
-            <th>💰 Prix</th>
-            <th>🔗 Lien</th>
-            <th>✔</th>
+            <th>🎁 Personne</th><th>🎁 Cadeau</th><th>💰 Prix</th><th>🔗 Lien</th><th>✔</th>
         </tr>
     </thead>
     <tbody></tbody>
 </table>
+</div>
+
+<!-- CALENDRIER -->
+<div id="calendrier">
+    <h2>🎄 Calendrier de l'avent – 2025</h2>
+
+    <div class="calendrier-grid">
+        <script>
+            const today = new Date();
+            const currentDay = (today.getMonth() === 11) ? today.getDate() : 0;
+
+            for (let i = 1; i <= 24; i++) {
+                const locked = (i === 1) ? "" : (i > currentDay ? "locked" : "");
+                document.write(`
+                    <div class="day ${locked}" onclick="openGift(${i})">
+                        <span class="day-number">${i}</span>
+                        <img src="https://cdn-icons-png.flaticon.com/512/4208/4208394.png"
+                        class="gift-icon">
+                    </div>
+                `);
+            }
+        </script>
+    </div>
+</div>
 
 </div>
 
-<!-- SON CLOCHETTES -->
-<audio id="bellSound" src="https://cdn.pixabay.com/download/audio/2021/10/26/audio_9b316bed47.mp3?filename=small-bell-91187.mp3"></audio>
+<!-- POPUP -->
+<div id="popup">
+    <button onclick="closePopup()">✖</button>
+    <img id="popupImage" src="">
+</div>
+
+<!-- MUSIQUE -->
+<audio id="music" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_4f400e82b5.mp3?filename=jingle-bells-110547.mp3" loop></audio>
 
 <!-- SAPIN -->
 <div id="tree">🎄</div>
 
 <script>
 
-// MODE NUIT
+/* ONGLET */
+function showTab(tab) {
+    document.getElementById("liste").style.display = "none";
+    document.getElementById("calendrier").style.display = "none";
+    document.getElementById(tab).style.display = "block";
+}
+
+/* IMAGES */
+const images = {
+    1:"images/toffee1.jpg",
+    2:"images/topito1.jpg",
+    3:"images/toffee2.jpg",
+    4:"images/topito2.jpg",
+    5:"images/toffee3.jpg",
+    6:"images/topito3.jpg",
+    7:"images/toffee4.jpg",
+    8:"images/topito4.jpg",
+    9:"images/toffee5.jpg",
+    10:"images/topito5.jpg",
+    11:"images/toffee6.jpg",
+    12:"images/topito6.jpg",
+    13:"images/toffee7.jpg",
+    14:"images/topito7.jpg",
+    15:"images/toffee8.jpg",
+    16:"images/topito8.jpg",
+    17:"images/toffee9.jpg",
+    18:"images/topito9.jpg",
+    19:"images/toffee10.jpg",
+    20:"images/topito10.jpg",
+    21:"images/toffee11.jpg",
+    22:"images/topito11.jpg",
+    23:"images/toffee12.jpg",
+    24:"images/topito12.jpg"
+};
+
+/* OUVERTURE CADEAU */
+function openGift(day){
+    const today = new Date();
+    const nowDay = (today.getMonth() === 11) ? today.getDate() : 0;
+
+	if(day !== 1 && day > nowDay){
+    		alert("Tu ne peux pas ouvrir cette case avant le " + day + " décembre 🎄");
+    		return;
+		}
+
+
+    const img = images[day];
+    if(!img){
+        alert("Image non encore ajoutée 🐶✨");
+        return;
+    }
+
+    document.getElementById("popupImage").src = img;
+    document.getElementById("popup").style.display = "flex";
+}
+
+function closePopup(){
+    document.getElementById("popup").style.display = "none";
+}
+
+/* MODE NUIT */
 document.getElementById("modeToggle").onclick = () => {
     document.body.classList.toggle("night");
     document.getElementById("modeToggle").textContent =
         document.body.classList.contains("night") ? "☀️ Mode Jour" : "🌙 Mode Nuit";
 };
 
+/* MUSIQUE */
+function toggleMusic(){
+    const m = document.getElementById("music");
+    const btn = document.getElementById("musicBtn");
 
-// CRÉER UNE LIGNE
+    if(m.paused){
+        m.play();
+        btn.textContent = "🔇 Stop musique";
+    } else {
+        m.pause();
+        btn.textContent = "🎵 Musique";
+    }
+}
+
+/* TABLEAU CADEAUX */
 function createRow(data = {}) {
     const tbody = document.querySelector("#giftTable tbody");
     const row = document.createElement("tr");
 
     row.innerHTML = `
-        <td>
-            <select class="personSelect">
-                <option>Pierre</option>
-                <option>Nathalya</option>
-                <option>Pierre & Nathalya</option>
-                <option>Toffee</option>
-                <option>Topito</option>
-            </select>
-        </td>
+        <td><select><option>Pierre</option><option>Nathalya</option><option>Pierre & Nathalya</option><option>Toffee</option><option>Topito</option></select></td>
         <td contenteditable="true">${data.cadeau || ""}</td>
         <td contenteditable="true">${data.prix || ""}</td>
         <td>
-            <div class="linkZone">
-                <input type="text" class="linkInput" value="${data.lien || ""}" placeholder="Coller un lien">
-                <div class="linkDisplay"></div>
-            </div>
+            <input class="linkInput" value="${data.lien || ""}" placeholder="Coller un lien">
+            <div class="linkDisplay"></div>
         </td>
         <td><input type="checkbox" ${data.checked ? "checked" : ""}></td>
     `;
 
     const checkbox = row.querySelector("input[type='checkbox']");
-    const bell = document.getElementById("bellSound");
-
-    checkbox.addEventListener("change", () => {
+    checkbox.onchange = () => {
         row.classList.toggle("selected", checkbox.checked);
-        if (checkbox.checked) bell.play();
         saveTable();
-    });
+    };
 
-    // Gestion du lien
     const linkInput = row.querySelector(".linkInput");
     const linkDisplay = row.querySelector(".linkDisplay");
 
-    function updateLink(url) {
-        linkDisplay.innerHTML = `
-            <a class="kdo-link" href="${url}" target="_blank">Voir le cadeau</a>
-            <button class="editLinkBtn">Modifier</button>
-        `;
+    function updateLink(url){
+        linkDisplay.innerHTML = `<a class="kdo-link" href="${url}" target="_blank">Voir</a>
+        <button class="editLinkBtn">Modifier</button>`;
     }
 
     linkInput.addEventListener("keydown", e => {
-        if (e.key === "Enter") {
-            e.preventDefault();
+        if(e.key === "Enter"){
             const url = linkInput.value.trim();
-            if (url) {
+            if(url){
                 updateLink(url);
-                linkInput.style.display = "none";
+                linkInput.style.display="none";
                 saveTable();
             }
         }
     });
 
-    linkDisplay.addEventListener("click", e => {
-        if (e.target.classList.contains("editLinkBtn")) {
-            linkInput.style.display = "block";
-            linkInput.focus();
+    linkDisplay.onclick = e => {
+        if(e.target.classList.contains("editLinkBtn")){
+            linkInput.style.display="block";
         }
-    });
+    };
 
-    if (data.lien) {
+    if(data.lien){
         updateLink(data.lien);
-        linkInput.style.display = "none";
+        linkInput.style.display="none";
     }
 
     tbody.appendChild(row);
 }
 
+document.getElementById("addRowBtn").onclick = () => { createRow(); saveTable(); };
 
-// Ajouter une ligne
-document.getElementById("addRowBtn").onclick = () => {
-    createRow();
-    saveTable();
-};
-
-
-// Sauvegarde
 function saveTable() {
-    const arr = [];
+    const list = [];
     document.querySelectorAll("#giftTable tbody tr").forEach(tr => {
-        arr.push({
-            personne: tr.querySelector("select").value,
+        list.push({
             cadeau: tr.children[1].innerText,
             prix: tr.children[2].innerText,
             lien: tr.querySelector(".linkInput").value,
-            checked: tr.querySelector("input[type='checkbox']").checked
+            checked: tr.querySelector("input[type=checkbox]").checked
         });
     });
-    localStorage.setItem("giftList", JSON.stringify(arr));
+    localStorage.setItem("giftList", JSON.stringify(list));
 }
 
-// Chargement
-(function load() {
+(function load(){
     const saved = JSON.parse(localStorage.getItem("giftList") || "[]");
     saved.forEach(r => createRow(r));
 })();
 
-
-// COMPTE À REBOURS
-function updateCountdown() {
-    const now = new Date();
-    const christmas = new Date(now.getFullYear(), 11, 25);
-
-    if (now > christmas) christmas.setFullYear(now.getFullYear() + 1);
-
-    const diff = christmas - now;
-    const j = Math.floor(diff / 86400000);
-    const h = Math.floor((diff / 3600000) % 24);
-    const m = Math.floor((diff / 60000) % 60);
-    const s = Math.floor((diff / 1000) % 60);
-
-    document.getElementById("countdown").innerHTML =
-        `🎅 Noël dans <b>${j}</b> jours, <b>${h}</b> h, <b>${m}</b> min, <b>${s}</b> sec 🎄`;
-}
-setInterval(updateCountdown, 1000);
-updateCountdown();
-
-
-// NEIGE RÉALISTE
+/* NEIGE */
 for (let i = 0; i < 60; i++) {
-    const flake = document.createElement("div");
-    flake.className = "flake";
-    flake.textContent = "❄";
-    flake.style.left = Math.random() * 100 + "vw";
-    flake.style.fontSize = 10 + Math.random() * 25 + "px";
-    flake.style.animationDuration = 5 + Math.random() * 12 + "s";
-    flake.style.animationDelay = Math.random() * 5 + "s";
-    document.body.appendChild(flake);
+    const f = document.createElement("div");
+    f.className = "flake";
+    f.textContent = "❄";
+    f.style.left = Math.random()*100+"vw";
+    f.style.fontSize = 10 + Math.random()*25 + "px";
+    f.style.animationDuration = 5 + Math.random()*12 + "s";
+    f.style.animationDelay = Math.random()*5 + "s";
+    document.body.appendChild(f);
 }
 
 </script>
 
 </body>
 </html>
-
-
