@@ -1,104 +1,378 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Liste de Noël de la Famille</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background: #f6f3ff;
+<meta charset="UTF-8">
+<title>Liste de Noël – Pierre & Nathalya / Toffee & Topito 🐶🐾</title>
+
+<!-- Police -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: linear-gradient(#fff8f8, #ffecec);
+        margin: 0;
+        padding: 20px;
+        overflow-x: hidden;
+    }
+
+    /* WRAPPER DORÉ */
+    #site-wrapper {
+        max-width: 1100px;
+        margin: auto;
+        padding: 20px 30px;
+        border: 5px solid #d6b669;
+        border-radius: 20px;
+        background: #ffffffcc;
+        box-shadow: 0 0 25px rgba(180,140,60,0.35);
+        backdrop-filter: blur(4px);
+        position: relative;
+    }
+
+    /* MODE JOUR / NUIT */
+    #modeToggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 10px 18px;
+        background: #b3001b;
+        color: white;
+        border: 2px solid #ddc98c;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: bold;
+        z-index: 999;
+    }
+    body.night {
+        background: linear-gradient(#111, #000);
+        color: #eee;
+    }
+    body.night table {
+        background: #222;
+    }
+
+    /* TITRE + BANNIÈRE */
+    h1 {
+        text-align: center;
+        font-size: 48px;
+        color: #b3001b;
+        font-family: "Great Vibes", cursive;
+        padding: 20px;
+        border: 4px solid #d6b669;
+        border-radius: 20px;
+        background: linear-gradient(white, #fff5f5);
+        box-shadow: 0 0 20px rgba(180,120,60,0.25);
+        display: inline-block;
+    }
+    h1::before, h1::after {
+        content: "🎄✨";
+        padding: 0 12px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-top: -5px;
+        color: #8b0000;
+    }
+
+    /* COMPTE À REBOURS */
+    #countdown {
+        text-align: center;
+        color: #b3001b;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    /* TABLEAU ÉLÉGANT */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 2px solid #ddc98c;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(150,0,0,0.15);
+        background: white;
+    }
+
+    th {
+        background: linear-gradient(#b3001b, #8b0000);
+        color: white;
+        padding: 14px;
+        font-size: 17px;
+    }
+
+    td {
+        border-bottom: 1px solid #f0d5d5;
+        padding: 12px;
+    }
+
+    tr.selected {
+        background: #38b000 !important;
+        color: white !important;
+        text-decoration: line-through;
+        font-weight: bold;
+        box-shadow: inset 0 0 18px rgba(255,255,255,0.7);
+        animation: sparkle 1s ease-out;
+    }
+
+    @keyframes sparkle {
+        0% { box-shadow: 0 0 20px #fff; }
+        100% { box-shadow: inset 0 0 18px rgba(255,255,255,0.7); }
+    }
+
+    /* CHAMP LIEN */
+    input.linkInput {
+        width: 92%;
+        padding: 6px;
+        border: 1px solid #b3001b;
+        border-radius: 5px;
+    }
+
+    .editLinkBtn {
+        margin-left: 5px;
+        padding: 4px 7px;
+        font-size: 12px;
+        cursor: pointer;
+        border-radius: 6px;
+        border: 1px solid #b3001b;
+        background: #fff0f0;
+    }
+
+    .kdo-link {
+        color: #0044cc;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+    /* BOUTON AJOUTER */
+    #addRowBtn {
+        margin: 0 auto 25px auto;
+        display: block;
+        padding: 12px 25px;
+        background: linear-gradient(#b3001b, #8b0000);
+        border: none;
+        color: white;
+        font-size: 20px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    /* NEIGE RÉALISTE */
+    .flake {
+        position: fixed;
+        top: -10px;
+        color: white;
+        text-shadow: 0 0 5px #fff;
+        animation: fall linear infinite;
+        pointer-events: none;
+        opacity: 0.9;
+    }
+
+    @keyframes fall {
+        to {
+            transform: translateY(105vh);
+            opacity: 0.3;
         }
-        h1 {
-            text-align: center;
-            color: #c62828;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 30px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-        }
-        th {
-            background: #ffe0e0;
-        }
-        tr.selected {
-            background: #d1ffd1 !important;
-        }
-        .img-col {
-            width: 90px;
-            text-align: center;
-        }
-        .img-col img {
-            width: 70px;
-        }
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            color: #444;
-        }
-    </style>
+    }
+
+    /* SAPIN ANIMÉ */
+    #tree {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        font-size: 55px;
+        animation: sway 2.8s ease-in-out infinite;
+    }
+    @keyframes sway {
+        0% { transform: rotate(-3deg); }
+        50% { transform: rotate(3deg); }
+        100% { transform: rotate(-3deg); }
+    }
+</style>
 </head>
+
 <body>
 
-<h1>🎄 Liste de Noël de la Famille 🎁</h1>
+<button id="modeToggle">🌙 Mode Nuit</button>
 
-<table>
+<div id="site-wrapper">
+
+<h1>Liste de Noël – Pierre, Nathalya & <span style="color:#d6b669;font-weight:bold">Toffee & Topito 🐶🐾</span></h1>
+<h2>Thème Noël élégant ✨</h2>
+
+<h3 id="countdown"></h3>
+
+<button id="addRowBtn">+ Ajouter un cadeau</button>
+
+<table id="giftTable">
     <thead>
         <tr>
-            <th>Personne</th>
-            <th>Idée cadeau</th>
-            <th>Image</th>
-            <th>Budget</th>
-            <th>Déjà pris ?</th>
+            <th>🎁 Personne</th>
+            <th>🎁 Cadeau</th>
+            <th>💰 Prix</th>
+            <th>🔗 Lien</th>
+            <th>✔</th>
         </tr>
     </thead>
-
-    <tbody>
-        <tr>
-            <td>Papa</td>
-            <td>Pull en laine</td>
-            <td class="img-col"><img src="https://i.imgur.com/KP1efl5.png"></td>
-            <td>40€</td>
-            <td><input type="checkbox" class="check"></td>
-        </tr>
-
-        <tr>
-            <td>Maman</td>
-            <td>Parfum</td>
-            <td class="img-col"><img src="https://i.imgur.com/cQG8XmA.png"></td>
-            <td>60€</td>
-            <td><input type="checkbox" class="check"></td>
-        </tr>
-
-        <tr>
-            <td>Moi</td>
-            <td>Casque audio</td>
-            <td class="img-col"><img src="https://i.imgur.com/iQy8H7J.png"></td>
-            <td>80€</td>
-            <td><input type="checkbox" class="check"></td>
-        </tr>
-    </tbody>
+    <tbody></tbody>
 </table>
 
-<div class="footer">✨ Fait avec amour pour la famille ✨</div>
+</div>
+
+<!-- SON CLOCHETTES -->
+<audio id="bellSound" src="https://cdn.pixabay.com/download/audio/2021/10/26/audio_9b316bed47.mp3?filename=small-bell-91187.mp3"></audio>
+
+<!-- SAPIN -->
+<div id="tree">🎄</div>
 
 <script>
-    // Quand on coche une case → surligne la ligne
-    document.querySelectorAll('.check').forEach(function(checkbox){
-        checkbox.addEventListener('change', function(){
-            const row = this.parentNode.parentNode;
-            if(this.checked){
-                row.classList.add('selected');
-            } else {
-                row.classList.remove('selected');
+
+// MODE NUIT
+document.getElementById("modeToggle").onclick = () => {
+    document.body.classList.toggle("night");
+    document.getElementById("modeToggle").textContent =
+        document.body.classList.contains("night") ? "☀️ Mode Jour" : "🌙 Mode Nuit";
+};
+
+
+// CRÉER UNE LIGNE
+function createRow(data = {}) {
+    const tbody = document.querySelector("#giftTable tbody");
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+        <td>
+            <select class="personSelect">
+                <option>Pierre</option>
+                <option>Nathalya</option>
+                <option>Pierre & Nathalya</option>
+                <option>Toffee</option>
+                <option>Topito</option>
+            </select>
+        </td>
+        <td contenteditable="true">${data.cadeau || ""}</td>
+        <td contenteditable="true">${data.prix || ""}</td>
+        <td>
+            <div class="linkZone">
+                <input type="text" class="linkInput" value="${data.lien || ""}" placeholder="Coller un lien">
+                <div class="linkDisplay"></div>
+            </div>
+        </td>
+        <td><input type="checkbox" ${data.checked ? "checked" : ""}></td>
+    `;
+
+    const checkbox = row.querySelector("input[type='checkbox']");
+    const bell = document.getElementById("bellSound");
+
+    checkbox.addEventListener("change", () => {
+        row.classList.toggle("selected", checkbox.checked);
+        if (checkbox.checked) bell.play();
+        saveTable();
+    });
+
+    // Gestion du lien
+    const linkInput = row.querySelector(".linkInput");
+    const linkDisplay = row.querySelector(".linkDisplay");
+
+    function updateLink(url) {
+        linkDisplay.innerHTML = `
+            <a class="kdo-link" href="${url}" target="_blank">Voir le cadeau</a>
+            <button class="editLinkBtn">Modifier</button>
+        `;
+    }
+
+    linkInput.addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            const url = linkInput.value.trim();
+            if (url) {
+                updateLink(url);
+                linkInput.style.display = "none";
+                saveTable();
             }
+        }
+    });
+
+    linkDisplay.addEventListener("click", e => {
+        if (e.target.classList.contains("editLinkBtn")) {
+            linkInput.style.display = "block";
+            linkInput.focus();
+        }
+    });
+
+    if (data.lien) {
+        updateLink(data.lien);
+        linkInput.style.display = "none";
+    }
+
+    tbody.appendChild(row);
+}
+
+
+// Ajouter une ligne
+document.getElementById("addRowBtn").onclick = () => {
+    createRow();
+    saveTable();
+};
+
+
+// Sauvegarde
+function saveTable() {
+    const arr = [];
+    document.querySelectorAll("#giftTable tbody tr").forEach(tr => {
+        arr.push({
+            personne: tr.querySelector("select").value,
+            cadeau: tr.children[1].innerText,
+            prix: tr.children[2].innerText,
+            lien: tr.querySelector(".linkInput").value,
+            checked: tr.querySelector("input[type='checkbox']").checked
         });
     });
+    localStorage.setItem("giftList", JSON.stringify(arr));
+}
+
+// Chargement
+(function load() {
+    const saved = JSON.parse(localStorage.getItem("giftList") || "[]");
+    saved.forEach(r => createRow(r));
+})();
+
+
+// COMPTE À REBOURS
+function updateCountdown() {
+    const now = new Date();
+    const christmas = new Date(now.getFullYear(), 11, 25);
+
+    if (now > christmas) christmas.setFullYear(now.getFullYear() + 1);
+
+    const diff = christmas - now;
+    const j = Math.floor(diff / 86400000);
+    const h = Math.floor((diff / 3600000) % 24);
+    const m = Math.floor((diff / 60000) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("countdown").innerHTML =
+        `🎅 Noël dans <b>${j}</b> jours, <b>${h}</b> h, <b>${m}</b> min, <b>${s}</b> sec 🎄`;
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+
+// NEIGE RÉALISTE
+for (let i = 0; i < 60; i++) {
+    const flake = document.createElement("div");
+    flake.className = "flake";
+    flake.textContent = "❄";
+    flake.style.left = Math.random() * 100 + "vw";
+    flake.style.fontSize = 10 + Math.random() * 25 + "px";
+    flake.style.animationDuration = 5 + Math.random() * 12 + "s";
+    flake.style.animationDelay = Math.random() * 5 + "s";
+    document.body.appendChild(flake);
+}
+
 </script>
 
 </body>
 </html>
+
+
