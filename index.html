@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <title>Liste de cadeaux 🎄</title>
 
+
+  <!-- FAVICON (LOGO ONGLET NAVIGATEUR) -->
+  <link rel="icon" type="image/jpeg" href="images/logo1.jpg">
+
+
   <link rel="stylesheet" href="style.css">
 
   <!-- Firebase -->
@@ -13,6 +18,41 @@
 
 </head>
 <body>
+
+<!-- MUSIQUE -->
+<audio id="noelMusic" autoplay loop>
+  <source src="musique-noel.mp3" type="audio/mpeg">
+</audio>
+
+<button id="muteBtn" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background:#d4af37;
+  border:none;
+  padding:12px 18px;
+  border-radius:50px;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  z-index:999999;
+  box-shadow:0 4px 10px rgba(0,0,0,0.3);
+">
+🔊 Musique
+</button>
+
+<!-- FORCE LA MUSIQUE À SE LANCER AU PREMIER CLIC -->
+<script>
+document.addEventListener("click", () => {
+  const music = document.getElementById("noelMusic");
+
+  if (music.paused) {
+    music.play().catch(() => {});
+  }
+}, { once: true });
+</script>
+<!-- FIN FIX MUSIQUE -->
+
 <nav class="topbar">
   🎄 Noël 2025
 <span id="countdown" style="margin-left:15px; font-weight:600; color:#d4af37;"></span>
@@ -38,7 +78,7 @@
     <h3>Ajouter un cadeau 🎁</h3>
 
     <input id="inputLabel" type="text" placeholder="Nom du cadeau">
-    <input id="inputPersonne" type="text" placeholder="Pour qui ? (ex: Papa)">
+    <input id="inputPersonne" type="text" placeholder="Pour qui ? (ex: Toffee)">
     <input id="inputPrix" type="number" placeholder="Prix en €">
     <input id="inputLien" type="text" placeholder="Lien vers le cadeau">
 
@@ -63,25 +103,22 @@
     </table>
   </section>
 
-</div> <!-- FIN ONGLET CADEAUX -->
+</div>
 
-
-<!-- CONTENU ONGLET CALENDRIER -->
+<!-- ONGLET CALENDRIER -->
 <div id="ongletCalendrier" style="display:none;">
 
   <section id="calendrier">
     <h2>🎄 Calendrier de l’avent – 2025</h2>
 
-    <!-- Phrase sous le titre -->
     <p style="text-align:center; margin-top:5px;">
       <i>Un jour, une photo ! Le premier jour est dispo en avant-première 🎁</i>
     </p>
 
-    <!-- Le calendrier -->
     <div id="grid-calendrier"></div>
   </section>
 
-</div> <!-- FIN ONGLET CALENDRIER -->
+</div>
 
 </div>
 
@@ -90,6 +127,14 @@
 <footer>
   <p>🎄 Noël 2025 – Créé avec ❤️</p>
 </footer>
+
+<div id="popup">
+  <img id="popupImg" src="">
+  <button onclick="document.getElementById('popup').style.display='none'"
+    style="margin-top:10px; background:#d4af37; color:white; border:none; padding:8px 14px; border-radius:5px;">
+    Fermer
+  </button>
+</div>
 
 </body>
 </html>
