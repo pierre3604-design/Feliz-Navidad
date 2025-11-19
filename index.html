@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Liste de cadeaux 🎄</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+
+<div class="tabs">
+  <button id="tabCadeaux" class="active">Liste de cadeaux 🎁</button>
+  <button id="tabCalendrier">Calendrier de l'avent 🎄</button>
+</div>
+
+<div id="formAjout">
+  <h3>Ajouter un cadeau 🎁</h3>
+
+
+  <input id="inputLabel" type="text" placeholder="Nom du cadeau">
+  <input id="inputPersonne" type="text" placeholder="Pour qui ? (ex: Papa)">
+  <input id="inputPrix" type="number" placeholder="Prix en €">
+  <input id="inputLien" type="text" placeholder="Lien vers le cadeau">
+  <button id="btnAjouter">Ajouter</button>
+</div>
+
+
+
+  <h2>🎁 Liste des cadeaux</h2>
+
+  <table id="tableCadeaux">
+    <thead>
+      <tr>
+        <th>Cadeau</th>
+	<th>Personne</th>
+        <th>Prix</th>
+ 	<th>Lien</th>
+      	<th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="liste"></tbody>
+  </table>
+
+<div id="calendrier" style="display:none;">
+  <h2>🎄 Calendrier de l’avent – 2025</h2>
+  <div id="grid-calendrier"></div>
+</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
