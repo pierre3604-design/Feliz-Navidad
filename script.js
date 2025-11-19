@@ -73,11 +73,30 @@ db.collection("Cadeaux").onSnapshot(snapshot => {
 
     tdBtn.appendChild(btn);
 
+    // -----------------------------
+    // 🗑️ Bouton SUPPRIMER
+    // -----------------------------
+    const tdSupprimer = document.createElement("td");
+    const btnDel = document.createElement("button");
+
+    btnDel.textContent = "🗑️";
+    btnDel.className = "btn btn-delete";
+
+    btnDel.addEventListener("click", () => {
+      if (confirm("Voulez-vous vraiment supprimer ce cadeau ?")) {
+        db.collection("Cadeaux").doc(doc.id).delete();
+      }
+    });
+
+    tdSupprimer.appendChild(btnDel);
+
+    // Ligne complète
     tr.appendChild(tdLabel);
     tr.appendChild(tdPersonne);
     tr.appendChild(tdPrix);
     tr.appendChild(tdLien);
     tr.appendChild(tdBtn);
+    tr.appendChild(tdSupprimer);
 
     liste.appendChild(tr);
   });
@@ -170,3 +189,5 @@ document.getElementById("btnAjouter").addEventListener("click", () => {
     alert("🎁 Cadeau ajouté !");
   });
 });
+
+
