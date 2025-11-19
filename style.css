@@ -295,6 +295,50 @@ footer {
   color: #888;
 }
 
+.snowflake {
+  position: fixed;
+  top: -10px;
+  color: white;
+  font-size: 18px;
+  pointer-events: none;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+.case {
+  transition: transform 0.3s ease;
+}
+
+.case.open {
+  transform: rotateY(180deg) scale(1.1);
+}
+
+#popup {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 3px solid #d4af37;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+  display: none;
+  max-width: 350px;
+  z-index: 9999;
+}
+
+#popup img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
 
 
 
