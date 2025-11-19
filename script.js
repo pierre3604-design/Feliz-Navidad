@@ -1,4 +1,3 @@
-
 // -----------------------------
 // Config Firebase
 // -----------------------------
@@ -29,19 +28,15 @@ db.collection("Cadeaux").onSnapshot(snapshot => {
     const tr = document.createElement("tr");
     if (item.pris) tr.classList.add("pris");
 
-    // Nom
     const tdLabel = document.createElement("td");
     tdLabel.textContent = item.label;
 
-    // Personne
     const tdPersonne = document.createElement("td");
     tdPersonne.textContent = item.personne || "-";
 
-    // Prix
     const tdPrix = document.createElement("td");
     tdPrix.textContent = item.prix ? item.prix + " €" : "-";
 
-    // Lien
     const tdLien = document.createElement("td");
     if (item.lien) {
       const a = document.createElement("a");
@@ -52,7 +47,6 @@ db.collection("Cadeaux").onSnapshot(snapshot => {
       tdLien.appendChild(a);
     } else tdLien.textContent = "-";
 
-    // Bouton Réserver / Annuler
     const tdBtn = document.createElement("td");
     const btn = document.createElement("button");
     btn.textContent = item.pris ? "❌ Annuler" : "✔ Réserver";
@@ -64,7 +58,6 @@ db.collection("Cadeaux").onSnapshot(snapshot => {
 
     tdBtn.appendChild(btn);
 
-    // Supprimer
     const tdSup = document.createElement("td");
     const del = document.createElement("button");
     del.textContent = "🗑️";
@@ -78,7 +71,6 @@ db.collection("Cadeaux").onSnapshot(snapshot => {
 
     tdSup.appendChild(del);
 
-    // Ajouter dans la ligne
     tr.appendChild(tdLabel);
     tr.appendChild(tdPersonne);
     tr.appendChild(tdPrix);
@@ -130,9 +122,6 @@ for (let i = 1; i <= 24; i++) {
   const div = document.createElement("div");
   div.className = "case-jour";
 
-  // Débloqué seulement si :
-  // - case 1
-  // - ou date >= jour du mois (decembre)
   const isUnlocked = (i === 1) || (month === 12 && day >= i);
 
   if (!isUnlocked) div.classList.add("locked");
@@ -145,12 +134,9 @@ for (let i = 1; i <= 24; i++) {
       return;
     }
 
-    const popup = document.createElement("div");
-    popup.className = "image-popup";
-    popup.innerHTML = `<img src="images/${i}.jpg">`;
+    div.classList.add("open");
 
-    popup.addEventListener("click", () => popup.remove());
-    document.body.appendChild(popup);
+    openPopup(`images/${i}.jpg`);
   });
 
   grid.appendChild(div);
@@ -183,13 +169,13 @@ document.getElementById("btnAjouter").addEventListener("click", () => {
   });
 });
 
+
 // -----------------------------
 // COUNTDOWN JUSQU'À NOËL
 // -----------------------------
 function updateCountdown() {
   const now = new Date();
   const christmas = new Date("2025-12-25T00:00:00");
-
   const diff = christmas - now;
 
   if (diff <= 0) {
@@ -205,7 +191,53 @@ function updateCountdown() {
     `⏳ Noël dans ${days} jours, ${hours}h ${minutes}min 🎅`;
 }
 
-// Mise à jour immédiate + toutes les minutes
 updateCountdown();
 setInterval(updateCountdown, 60000);
 
+
+// -----------------------------
+// MUSIQUE + BOUTON MUET
+// -----------------------------
+const music = document.getElementById("noelMusic");
+const muteBtn = document.getElementById("muteBtn");
+
+muteBtn.addEventListener("click", () => {
+  if (music.muted) {
+    music.muted = false;
+    muteBtn.textContent = "🔊 Musique";
+  } else {
+    music.muted = true;
+    muteBtn.textContent = "🔇 Muet";
+  }
+});
+
+
+// -----------------------------
+// FLOCONS DE NEIGE
+// -----------------------------
+function makeSnow() {
+  const flake = document.createElement("div");
+  flake.classList.add("snowflake");
+  flake.textContent = "❄";
+
+  flake.style.left = Math.random() * 100 + "vw";
+  flake.style.animationDuration = (3 + Math.random() * 5) + "s";
+
+  document.body.appendChild(flake);
+
+  setTimeout(() => flake.remove(), 8000);
+}
+
+setInterval(makeSnow, 150);
+
+
+// -----------------------------
+// POPUP IMAGE
+// -----------------------------
+function openPopup(imageUrl) {
+  const popup = document.getElementById("popup");
+  const popupImg = document.getElementById("popupImg");
+
+  popupImg.src = imageUrl;
+  popup.style.display = "block";
+}
