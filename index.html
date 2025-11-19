@@ -9,53 +9,68 @@
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
 </head>
 <body>
+<nav class="topbar">
+  🎄 Noël 2025
+</nav>
 
-<div class="tabs">
-  <button id="tabCadeaux" class="active">Liste de cadeaux 🎁</button>
-  <button id="tabCalendrier">Calendrier de l'avent 🎄</button>
+<div class="container">
+
+<!-- Logo -->
+<img src="images/logo.jpg" class="logo-site" alt="Logo du site">
+
+<!-- Onglets -->
+<div class="tabs" class="shadow">
+  <button id="tabCadeaux" class="active">🎁 Liste de cadeaux</button>
+  <button id="tabCalendrier">🎄 Calendrier de l’avent</button>
 </div>
 
-<div id="formAjout">
+<!-- Formulaire d'ajout -->
+<div id="formAjout" class="shadow">
   <h3>Ajouter un cadeau 🎁</h3>
-
 
   <input id="inputLabel" type="text" placeholder="Nom du cadeau">
   <input id="inputPersonne" type="text" placeholder="Pour qui ? (ex: Papa)">
   <input id="inputPrix" type="number" placeholder="Prix en €">
   <input id="inputLien" type="text" placeholder="Lien vers le cadeau">
+
   <button id="btnAjouter">Ajouter</button>
 </div>
 
-
-
+<!-- Tableau des cadeaux -->
+<section id="sectionCadeaux" class="shadow">
   <h2>🎁 Liste des cadeaux</h2>
 
   <table id="tableCadeaux">
     <thead>
       <tr>
         <th>Cadeau</th>
-	<th>Personne</th>
+        <th>Personne</th>
         <th>Prix</th>
- 	<th>Lien</th>
-      	<th>Action</th>
-	<th>Supprimer</th>
-
+        <th>Lien</th>
+        <th>Action</th>
+        <th>Supprimer</th>
       </tr>
     </thead>
     <tbody id="liste"></tbody>
   </table>
+</section>
 
-<div id="calendrier" style="display:none;">
+<!-- Calendrier -->
+<section id="calendrier" style="display:none;">
   <h2>🎄 Calendrier de l’avent – 2025</h2>
   <div id="grid-calendrier"></div>
+</section>
 </div>
+<script src="script.js"></script>
 
-  <script src="script.js"></script>
+<footer>
+  <p>🎄 Noël 2025 – Créé avec ❤️</p>
+</footer>
+
+
 </body>
 </html>
-
-</body>
-</html>
-
