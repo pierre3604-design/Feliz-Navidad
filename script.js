@@ -38,14 +38,32 @@ db.collection("Cadeaux").onSnapshot(snapshot => {
     tdPrix.textContent = item.prix ? item.prix + " €" : "-";
 
     const tdLien = document.createElement("td");
+
     if (item.lien) {
       const a = document.createElement("a");
       a.href = item.lien;
       a.target = "_blank";
       a.textContent = "Voir";
       a.style.color = "#007bff";
+
       tdLien.appendChild(a);
-    } else tdLien.textContent = "-";
+
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "✏️";
+      editBtn.className = "btn btn-edit";
+      editBtn.style.marginLeft = "8px";
+
+      editBtn.addEventListener("click", () => {
+        const newLink = prompt("Nouveau lien :", item.lien);
+        if (newLink !== null) {
+          db.collection("Cadeaux").doc(doc.id).update({ lien: newLink.trim() });
+        }
+      });
+
+      tdLien.appendChild(editBtn);
+    } else {
+      tdLien.textContent = "-";
+    }
 
     const tdBtn = document.createElement("td");
     const btn = document.createElement("button");
@@ -134,13 +152,33 @@ for (let i = 1; i <= 24; i++) {
       return;
     }
 
-    div.classList.add("open");
-
-    openPopup(`images/${i}.jpg`);
+    openPopup(`images/${i}.jpeg`);
   });
 
   grid.appendChild(div);
 }
+
+
+// -----------------------------
+// POPUP IMAGE (NOUVELLE VERSION)
+// -----------------------------
+function openPopup(imageUrl) {
+  const overlay = document.getElementById("popupOverlay");
+  const img = document.getElementById("popupImg");
+
+  img.src = imageUrl;
+  overlay.style.display = "flex";
+}
+
+function closePopup() {
+  document.getElementById("popupOverlay").style.display = "none";
+}
+
+document.getElementById("closePopup").addEventListener("click", closePopup);
+
+document.getElementById("popupOverlay").addEventListener("click", (e) => {
+  if (e.target.id === "popupOverlay") closePopup();
+});
 
 
 // -----------------------------
@@ -202,13 +240,8 @@ const music = document.getElementById("noelMusic");
 const muteBtn = document.getElementById("muteBtn");
 
 muteBtn.addEventListener("click", () => {
-  if (music.muted) {
-    music.muted = false;
-    muteBtn.textContent = "🔊 Musique";
-  } else {
-    music.muted = true;
-    muteBtn.textContent = "🔇 Muet";
-  }
+  music.muted = !music.muted;
+  muteBtn.textContent = music.muted ? "🔇 Muet" : "🔊 Musique";
 });
 
 
@@ -224,20 +257,7 @@ function makeSnow() {
   flake.style.animationDuration = (3 + Math.random() * 5) + "s";
 
   document.body.appendChild(flake);
-
   setTimeout(() => flake.remove(), 8000);
 }
 
 setInterval(makeSnow, 150);
-
-
-// -----------------------------
-// POPUP IMAGE
-// -----------------------------
-function openPopup(imageUrl) {
-  const popup = document.getElementById("popup");
-  const popupImg = document.getElementById("popupImg");
-
-  popupImg.src = imageUrl;
-  popup.style.display = "block";
-}
